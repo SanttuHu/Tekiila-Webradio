@@ -1,0 +1,11 @@
+body {
+	background-color: #ffffff;
+	color: #111111;
+	font-family: "Comic Sans MS", cursive, sans-serif;
+}
+h1 {
+	color: #111111;
+}
+button {
+	padding: 8px 15px;
+}
