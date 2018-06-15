@@ -15,7 +15,7 @@
   </audio>
 	  <div>
     Now playing:<br>
-    <span id="name">Song name goes here, you won't see this unless something is broken...<span>
+    <span id="name">Song name goes here when it has finished loading<span>
 	  </div>
  
 
@@ -29,12 +29,12 @@
 	  $(function () {
 
 
-		socket.on('play', function(file, time){
+		socket.on('play', function(file, name, time){
       if (play){
         document.getElementById("player").src = file;
         document.getElementById("player").currentTime = time;
         document.getElementById("player").load();
-        document.getElementById("name").innerHTML = file;
+        document.getElementById("name").innerHTML = name;
 
       }
 		});

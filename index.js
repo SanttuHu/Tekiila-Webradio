@@ -5,11 +5,12 @@ config		= require('./config/config'),
 io 			= require('socket.io')(http);
 mp3Duration = require('mp3-duration');
 glob 		= require("glob");
+queryString	= require('querystring');
 path 		= "public/music/";
 
 app.use(express.static(__dirname + '/public'));
 
-fileName = "02 - Slipknot - People = Shit.mp3";
+fileName = "";
 endTime = 0;
 startDate = new Date();
 startTime = 0;
@@ -62,12 +63,12 @@ io.on('connection', function(socket){
   console.log("clients: ", clientCount);
   var endDate = new Date();
   var difference = (endDate.getTime() - startDate.getTime())/1000;
-	socket.emit('play', fileName, difference);
+	socket.emit('play', queryString.escape(fileName), fileName, difference);
 	//a connection estabilished on the pair chat page
   socket.on('requestPlayBack', function(){
     var endDate = new Date();
     var difference = (endDate.getTime() - startDate.getTime())/1000;
-  	socket.emit('play', fileName, difference);
+  	socket.emit('play', queryString.escape(fileName), fileName, difference);
   });
 	socket.on('disconnect', function(){
 	  clientCount--;
