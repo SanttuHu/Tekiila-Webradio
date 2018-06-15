@@ -40,7 +40,7 @@ function changeSong(){
 
     var file = files[Math.floor(Math.random() * files.length)];
     fileName = file.slice(7);
-    io.sockets.emit('play', fileName, startTime);
+    io.sockets.emit('play', queryString.escape(fileName), fileName, startTime);
 
     mp3Duration(file, function (err, result) {
       if (err) return console.log(err.message);
