@@ -87,3 +87,8 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+
+# music files
+/public/music/*
+/public/music/**/*
