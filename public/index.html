@@ -56,11 +56,22 @@
 
     }
 
+	function renameFile(){
+		socket.emit('renameFile', document.getElementById("pinCode").value, document.getElementById("newName").value)
+		document.getElementById("pinCode").value = "";
+		document.getElementById("newName").value = "";
+	}
 
   </script>
 
 
-  <button id="playButton" type="button" onClick="playStop()">Stop</button>
+  <button id="playButton" type="button" onClick="playStop()">Stop</button> <br><br>
+  Rename current song:<br>
+  (Only give the song name without the folder or .mp3 ending)<br>
+  <input id="pinCode" type="password" placeholder="passwd"> <br>
+  <input id="newName" type="text" placeholder="new name"> <br>
+  <button id="renameButton" type="button" onClick="renameFile()">Rename current song</button> <br><br>
+
 
 </body>
 </html>

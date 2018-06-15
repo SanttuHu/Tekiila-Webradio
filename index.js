@@ -6,6 +6,7 @@ io 			= require('socket.io')(http);
 mp3Duration = require('mp3-duration');
 glob 		= require("glob");
 queryString	= require('querystring');
+fs 			= require('fs');
 path 		= "public/music/";
 
 app.use(express.static(__dirname + '/public'));
@@ -55,6 +56,31 @@ function changeSong(){
 }
 
 
+function renameCurrentSong(passwd, newName){
+	if (passwd != "SALASANA MENEE TÄHÄN, ei tosin näy gitissä asti"){
+		return;
+	}
+	var filePath = fileName.substring(0, fileName.lastIndexOf("/"));
+	if (newName == ""){
+		return;
+	}
+	console.log("changing ", fileName, " to ", filePath+newName+".mp3");
+	if (!fs.existsSync(__dirname+ "/public/"+filePath + "/" + newName + ".mp3")) { //check if the file already exists
+		fs.rename(__dirname+ "/public/"+fileName, __dirname+ "/public/"+filePath + "/" + newName + ".mp3", function(err) {
+			if ( err ){
+				console.log('ERROR: ' + err);
+				return;
+			}
+			
+			fileName = filePath + "/" + newName + ".mp3";
+			var endDate = new Date();
+			var difference = (endDate.getTime() - startDate.getTime())/1000;
+			io.sockets.emit('play', queryString.escape(fileName), fileName, difference);
+		});
+
+	}
+
+}
 
 
 
@@ -69,6 +95,10 @@ io.on('connection', function(socket){
     var endDate = new Date();
     var difference = (endDate.getTime() - startDate.getTime())/1000;
   	socket.emit('play', queryString.escape(fileName), fileName, difference);
+  });
+  socket.on('renameFile', function(passwd, newName){
+	  renameCurrentSong(passwd, newName);
+	
   });
 	socket.on('disconnect', function(){
 	  clientCount--;
