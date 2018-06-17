@@ -29,57 +29,59 @@ function changeSong(){
   getDirectories(path, function (err, res) {
     if (err) {
       console.log('Error', err);
-    } else {
-    var files = [];
-  	for (var i = 0; i < res.length; i++) {
-      //Do something
-      if (res[i].substr(res[i].length - 4) === ".mp3"){
-        files.push(res[i]);
+    }
+    else {
+      var files = [];
+      for (var i = 0; i < res.length; i++) {
+        //Do something
+        if (res[i].substr(res[i].length - 4) === ".mp3"){
+          files.push(res[i]);
+        }
       }
-  	}
 
 
-    var file = files[Math.floor(Math.random() * files.length)];
-    fileName = file.slice(7);
-    io.sockets.emit('play', queryString.escape(fileName), fileName, startTime);
+      var file = files[Math.floor(Math.random() * files.length)];
+      try {
+        fileName = file.slice(7);
+        io.sockets.emit('play', queryString.escape(fileName), fileName, startTime);
 
-    mp3Duration(file, function (err, result) {
-      if (err) return console.log(err.message);
-      endTime = result;
-      startDate = new Date();
-      setTimeout(changeSong, result*1000);
-    });
+        mp3Duration(file, function (err, result) {
+          if (err) return console.log(err.message);
+          endTime = result;
+          startDate = new Date();
+          setTimeout(changeSong, result*1000);
+        });
+      } // /try
+      catch(err) {
+      
+      }
     }
   });
-
 
 }
 
 
 function renameCurrentSong(passwd, newName){
-	if (passwd != "SALASANA MENEE TÄHÄN, ei tosin näy gitissä asti"){
-		return;
-	}
-	var filePath = fileName.substring(0, fileName.lastIndexOf("/"));
-	if (newName == ""){
-		return;
-	}
-	console.log("changing ", fileName, " to ", filePath+newName+".mp3");
-	if (!fs.existsSync(__dirname+ "/public/"+filePath + "/" + newName + ".mp3")) { //check if the file already exists
-		fs.rename(__dirname+ "/public/"+fileName, __dirname+ "/public/"+filePath + "/" + newName + ".mp3", function(err) {
-			if ( err ){
-				console.log('ERROR: ' + err);
-				return;
-			}
-			
-			fileName = filePath + "/" + newName + ".mp3";
-			var endDate = new Date();
-			var difference = (endDate.getTime() - startDate.getTime())/1000;
-			io.sockets.emit('play', queryString.escape(fileName), fileName, difference);
-		});
-
-	}
-
+  if (passwd != "SALASANA MENEE TÄHÄN, ei tosin näy gitissä asti"){
+    return;
+  }
+  var filePath = fileName.substring(0, fileName.lastIndexOf("/"));
+  if (newName == ""){
+    return;
+  }
+  console.log("changing ", fileName, " to ", filePath+newName+".mp3");
+  if (!fs.existsSync(__dirname+ "/public/"+filePath + "/" + newName + ".mp3")) { //check if the file already exists
+    fs.rename(__dirname+ "/public/"+fileName, __dirname+ "/public/"+filePath + "/" + newName + ".mp3", function(err) {
+      if ( err ){
+        console.log('ERROR: ' + err);
+        return;
+      }
+      fileName = filePath + "/" + newName + ".mp3";
+      var endDate = new Date();
+      var difference = (endDate.getTime() - startDate.getTime())/1000;
+      io.sockets.emit('play', queryString.escape(fileName), fileName, difference);
+    });
+  }
 }
 
 

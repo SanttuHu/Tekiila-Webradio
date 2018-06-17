@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+
+    <title>Tekiila WR (WebRadio)</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="cover.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+  </head>
+
+  <body class="text-center">
+
+<!    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+      <div class="container" styles="top: 20%;">
+      <header class="masthead mb-auto">
+        <div class="inner">
+          <h3 class="masthead-brand">Tekiila WebRadio</h3>
+          <nav class="nav nav-masthead justify-content-center">
+          <a class="nav-link active" href="http://www.tekiila.fi">
+            <img src="tekiila_vastavarit.png" alt="tekiila_logo" height="50" width="100"></img>
+          </a>
+          </nav>
+        </div>
+      </header>
+
+      <main role="main" class="inner cover">
+        <h1 class="cover-heading">Now playing:</h1>
+        <p class="lead"></p>
+        <audio id="player" >
+          <source src="asdf" type="audio/mpeg">
+        </audio>
+        <div>
+          <p class="lead" id="name">Song name goes here, you won't see this unless something is broken...<span>
+        </div>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+        <script>
+          play = true; //true == song is playing, false == not playing
+          document.getElementById("player").autoplay = true;
+          var socket = io();
+          $(function () {
+            socket.on('play', function(file, name, time){
+              if (play){
+                document.getElementById("player").src = file;
+                document.getElementById("player").currentTime = time;
+                document.getElementById("player").load();
+                document.getElementById("name").innerHTML = name;
+              }
+            });
+          });
+
+          function playStop(){
+            if (document.getElementById("playButton").textContent == "Mute"){
+              play = false;
+              document.getElementById("playButton").textContent = "Unmute";
+              document.getElementById("player").pause();
+            }
+            else {
+              play = true;
+              document.getElementById("playButton").textContent = "Mute";
+              socket.emit('requestPlayBack');
+            }
+          }
+          function renameFile(){
+            socket.emit('renameFile', document.getElementById("pinCode").value,document.getElementById("newName").value);
+            document.getElementById("pinCode").value = "";
+            document.getElementById("newName").value = "";
+          }
+
+        </script>
+
+
+    <button type="button" class="btn btn-default" id="playButton" onClick="playStop()">Mute</button>
+    <p>
+      Rename current song:
+    </p>
+    <br>
+    <p>
+      (Only give the song name without the folder or .mp3 ending)
+    </p>
+    <br>
+    <input id="pinCode" type="password" placeholder="passwd"> <br>
+    <input id="newName" type="text" placeholder="new name"> <br>
+    <button id="renameButton" type="button" onClick="renameFile()">Rename current song</button> <br><br>
+
+
+      </main>
+
+      <footer class="mastfoot mt-auto">
+        <div class="inner">
+          <p>
+          </p>
+        </div>
+      </footer>
+    </div>
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="js/vendor/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>

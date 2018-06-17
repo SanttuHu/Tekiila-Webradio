@@ -1,0 +1,13 @@
+body {
+    background-image: url("bg.jpg");
+    background-color: #808080;
+    background-repeat: no-repeat, repeat;
+    background-size: cover;
+
+}
+p {
+    font-size: 18px;
+}
+p, h1, h2, h3 {
+    text-shadow: 0 0 4px #FFFFFF;
+}
